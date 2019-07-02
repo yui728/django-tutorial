@@ -1,0 +1,6 @@
+Include/*
+Lib/*
+Scripts/*
+pyenv.cfg
+pyvenv.cfg
+*.cpython-37.pyc
