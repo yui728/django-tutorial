@@ -11,7 +11,7 @@ def hello_world(reuqest):
 def hello_template(request):
     d = {
         "hour": datetime.now().hour,
-        "message": 'Sample Message.',
+        "message": 'Sample message',
     }
     return render(request, 'index.html', d)
 
