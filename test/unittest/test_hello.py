@@ -38,13 +38,27 @@ class HelloClientTest(TestCase):
         self.assertContains(response, 9)
         
 
-    def test_hello_006(self):
+    def test_hello_006_01(self):
         response = self.client.get('/hello/get/')
-        assert response.status_code == 200
+        self.assertTemplateUsed(response, 'get_query.html')
+        self.assertNotContains(response, 'さん、こんにちは。')
 
-    def test_hello_007(self):
+    def test_hello_006_02(self):
+        response = self.client.get('/hello/get/', {'your_name': 'Tommy'})
+        self.assertTemplateUsed(response, 'get_query.html')
+        self.assertContains(response, 'Tommyさん、こんにちは。')
+
+    def test_hello_007_01(self):
         response = self.client.get('/hello/forms/')
-        assert response.status_code == 200
+        self.assertTemplateUsed(response, 'forms.html')
+        self.assertContains(response, 'データ検証に失敗しました')
+
+    def test_hello_007_02(self):
+        response = self.client.get('/hello/forms/', {'your_name': ""})
+        self.assertTemplateUsed(response, 'forms.html')
+        self.assertContains(response, 'データ検証に失敗しました')
+        print("context:\n{}".format(response.context))
+        self.assertFormError(response, 'form', 'your_name', 'データ検証に失敗しました')
 
     def test_hello_008(self):
         response = self.client.get('/hello/forms_sample/')
