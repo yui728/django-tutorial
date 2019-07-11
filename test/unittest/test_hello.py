@@ -57,13 +57,46 @@ class HelloClientTest(TestCase):
         response = self.client.get('/hello/forms/', {'your_name': ""})
         self.assertTemplateUsed(response, 'forms.html')
         self.assertContains(response, 'データ検証に失敗しました')
-        print("context:\n{}".format(response.context))
-        self.assertFormError(response, 'form', 'your_name', 'データ検証に失敗しました')
+        self.assertFormError(response, 'form', 'your_name', 'このフィールドは必須です。')
 
-    def test_hello_008(self):
+    def test_hello_007_03(self):
+        response = self.client.get('/hello/forms/', {'your_name': "Tommy"})
+        self.assertTemplateUsed(response, 'forms.html')
+        self.assertNotContains(response, 'データ検証に失敗しました')
+        self.assertContains(response, 'データ検証に成功しました')
+        self.assertFormError(response, 'form', 'your_name', None)
+
+    def test_hello_008_01(self):
         response = self.client.get('/hello/forms_sample/')
-        assert response.status_code == 200
+        self.assertTemplateUsed(response, 'form_samples.html')
+        self.assertFormError(response, 'form', 'age', None)
+        self.assertFormError(response, "form", "birthday", None)
+        self.assertFormError(response, "form", "send_message", None)
+        self.assertFormError(response, "form", "gender_r", None)
+        self.assertFormError(response, "form", "gender_s", None)
+        self.assertFormError(response, "form", "food_s", None)
+        self.assertFormError(response, "form", "food_c", None)
 
-    def test_hello_009(self):
+    def test_hello_009_01(self):
         response = self.client.get('/hello/models/')
-        assert response.status_code == 200
+        self.assertTemplateUsed(response, 'models.html')
+        self.assertFormError(response, 'form', 'your_name', None)
+
+    def test_hello_009_02(self):
+        response = self.client.post(
+            '/hello/models/',
+            {
+                "your_name": ""
+            }
+        )
+        self.assertTemplateUsed(response, 'models.html')
+        self.assertFormError(response, 'form', 'your_name', "このフィールドは必須です。")
+
+    def test_hello_009_03(self):
+        response = self.client.post(
+            '/hello/models/',
+            {
+                "your_name": "Peddy"
+            }
+        )
+        self.assertRedirects(response, '/hello/models/')
