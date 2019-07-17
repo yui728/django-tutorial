@@ -1,0 +1,16 @@
+[
+    {
+        "model": "hello.hello",
+        "pk": 1,
+        "fields": {
+            "your_name": "Becky"
+        }
+    },
+    {
+        "model": "hello.hello",
+        "pk": 2,
+        "fields":{
+            "your_name": "Paul"
+        }
+    }
+]

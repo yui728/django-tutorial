@@ -1,7 +1,10 @@
 from django.test import TestCase
 from time import strftime
+from hello.models import Hello
 
 class HelloClientTest(TestCase):
+    fixtures = ['hello_test_data.json']
+
     def test_hello_001(self):
         response = self.client.get('/hello/')
         self.assertContains(response, 'Hello World!')
@@ -81,6 +84,8 @@ class HelloClientTest(TestCase):
         response = self.client.get('/hello/models/')
         self.assertTemplateUsed(response, 'models.html')
         self.assertFormError(response, 'form', 'your_name', None)
+        self.assertContains(response, "Becky")
+        self.assertContains(response, "Paul")
 
     def test_hello_009_02(self):
         response = self.client.post(
@@ -100,3 +105,8 @@ class HelloClientTest(TestCase):
             }
         )
         self.assertRedirects(response, '/hello/models/')
+
+        response2 = self.client.get('/hello/models/')
+        self.assertContains(response2, "Becky")
+        self.assertContains(response2, "Paul")
+        self.assertContains(response2, "Peddy")
